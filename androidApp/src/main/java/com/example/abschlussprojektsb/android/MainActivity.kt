@@ -8,7 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.abschlussprojektsb.model.UserInfoDto
+import com.example.abschlussprojektsb.LoadingText
 import com.example.abschlussprojektsb.network.NetworkService
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        refreshContent("lädt..")
+        refreshContent(LoadingText().greet())
 
         val scope = MainScope()
 

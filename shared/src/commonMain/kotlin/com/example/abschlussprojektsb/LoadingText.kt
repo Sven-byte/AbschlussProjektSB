@@ -1,11 +1,11 @@
 package com.example.abschlussprojektsb
 
 
-class Greeting {
+class LoadingText {
     private val platform: Platform = getPlatform()
 
     fun greet(): String {
-        return "Hello, ${platform.name}!"
+        return "${platform.name} Gerät lädt..."
 
     }
 }
