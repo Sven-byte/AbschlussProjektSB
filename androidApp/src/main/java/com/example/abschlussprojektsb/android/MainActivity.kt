@@ -8,7 +8,8 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.abschlussprojektsb.Greeting
+import com.example.abschlussprojektsb.model.UserInfoDto
+import com.example.abschlussprojektsb.network.NetworkService
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -21,16 +22,25 @@ class MainActivity : ComponentActivity() {
         val scope = MainScope()
 
         scope.launch {
-            kotlin.runCatching { Greeting().greeting()
+            kotlin.runCatching { NetworkService().login()
             }.onSuccess {
-                refreshContent(it)
+                kotlin.runCatching {
+                    NetworkService().getTasks(it.token)
+                }.onSuccess {
+                    refreshContent(it.toString())
+                }.onFailure {
+                    refreshContent("Tasks konnten nicht geladen werden.")
+                }
             }.onFailure {
-                refreshContent("fail")
+                refreshContent("Login fehlgeschlagen.")
             }
         }
-
-
     }
+
+
+
+
+
 
     private fun refreshContent(displayedText: String) {
         setContent {
