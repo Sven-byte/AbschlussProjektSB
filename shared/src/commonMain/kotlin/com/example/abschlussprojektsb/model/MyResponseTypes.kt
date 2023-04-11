@@ -11,9 +11,9 @@ data class UserInfoDto(
 
 @kotlinx.serialization.Serializable
 data class UserTokenDto(
-    val token: String,
-    val id: String,
-    val username: String,
+   @SerialName ("token")val token: String,
+   @SerialName ("id")val id: String,
+   @SerialName ("username")val username: String,
 )
 
 @kotlinx.serialization.Serializable
@@ -25,4 +25,5 @@ data class TaskDto(
     @SerialName("end")val end: String?,
     @SerialName("content")val content: String?,
 )
+
 

@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.abschlussprojektsb.LoadingText
+import com.example.abschlussprojektsb.android.model.Task
+import com.example.abschlussprojektsb.android.model.Task.Companion.toTaskList
 import com.example.abschlussprojektsb.network.NetworkService
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -27,7 +29,10 @@ class MainActivity : ComponentActivity() {
                 kotlin.runCatching {
                     NetworkService().getTasks(it.token)
                 }.onSuccess {
-                    refreshContent(it.toString())
+
+
+                    refreshContent( it.toTaskList().toString() )
+
                 }.onFailure {
                     refreshContent("Tasks konnten nicht geladen werden.")
                 }
