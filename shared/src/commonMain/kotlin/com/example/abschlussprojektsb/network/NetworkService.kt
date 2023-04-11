@@ -3,6 +3,7 @@ package com.example.abschlussprojektsb.network
 import com.example.abschlussprojektsb.model.TaskDto
 import com.example.abschlussprojektsb.model.UserInfoDto
 import com.example.abschlussprojektsb.model.UserTokenDto
+import com.example.abschlussprojektsb.service.checkIfCredentialsArePlausible
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -34,7 +35,12 @@ class NetworkService(): RequestService {
         val response: HttpResponse = client.request("https://tasksapi.pschuberth.de/user/login") {
             method = HttpMethod.Post
             contentType(ContentType.Application.Json)
-            setBody(UserInfoDto("sven", "test"))
+
+            val userInputTestData = UserInfoDto("sven", "test")
+
+            if (checkIfCredentialsArePlausible(userInputTestData)){
+                setBody(userInputTestData)
+            }
         }
         return response.body<UserTokenDto>()
     }
