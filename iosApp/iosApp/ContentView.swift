@@ -18,7 +18,24 @@ extension ContentView {
             NetworkService().login { login, error in
                 DispatchQueue.main.async {
                     if let login = login {
+                        
                         self.text = login.username
+                        let tokenFromApi : String = login.token
+                        
+                        NetworkService().getTasks(token: tokenFromApi) { getTasks, error in
+                            
+                            DispatchQueue.main.async {
+                                
+                                if let tasks = getTasks {
+                                    
+                                    self.text = tasks[0].title
+                                    
+                                } else {
+                                    self.text = error?.localizedDescription ?? "error"
+                                }
+                            }
+                        }
+                        
                     } else {
                         self.text = error?.localizedDescription ?? "error"
                     }
