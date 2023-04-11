@@ -8,18 +8,54 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.abschlussprojektsb.Greeting
+import com.example.abschlussprojektsb.LoadingText
+import com.example.abschlussprojektsb.android.model.Task
+import com.example.abschlussprojektsb.android.model.Task.Companion.toTaskList
+import com.example.abschlussprojektsb.network.NetworkService
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        refreshContent(LoadingText().greet())
+
+        val scope = MainScope()
+
+        scope.launch {
+            kotlin.runCatching { NetworkService().login()
+            }.onSuccess {
+                kotlin.runCatching {
+                    NetworkService().getTasks(it.token)
+                }.onSuccess {
+
+
+                    refreshContent( it.toTaskList().toString() )
+
+                }.onFailure {
+                    refreshContent("Tasks konnten nicht geladen werden.")
+                }
+            }.onFailure {
+                refreshContent("Login fehlgeschlagen.")
+            }
+        }
+    }
+
+
+
+
+
+
+    private fun refreshContent(displayedText: String) {
         setContent {
             MyApplicationTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    GreetingView(Greeting().greet())
+                    GreetingView(displayedText)
+
                 }
             }
         }
